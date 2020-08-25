@@ -39,6 +39,7 @@ export default (props) => {
               placeholder="E-mail"
               bg="white"
               color="black"
+              mb={1}
               value={email}
               onChange={({ target: { value } }) => setEmail(value)}
             />

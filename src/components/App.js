@@ -20,8 +20,9 @@ function App() {
 
         <Flex
           sx={{
-            height: "calc(100vh - 54px)",
+            minHeight: "calc(100vh - 54px)",
             backgroundColor: "#f5f9f7",
+            marginTop: "54px",
           }}
         >
           <Switch>
