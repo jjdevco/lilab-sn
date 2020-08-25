@@ -6,46 +6,61 @@ import { Box, Flex, Link as LinkButton, Text } from "rebass";
 
 export default (props) => {
   return (
-    <Flex
+    <Box
       sx={{
-        backgroundColor: "#d8e7e1",
-        opacity: 0.9,
-        zIndex: 2,
+        width: "100vw",
+        position: "fixed",
+        top: 0,
       }}
     >
       <Flex
         sx={{
-          maxWidth: ["100%", "100%", "920px"],
+          backgroundColor: "#d8e7e1",
+          opacity: 0.95,
+          zIndex: 2,
         }}
-        flex="1 1 auto"
-        p={2}
-        mx="auto"
-        color="black"
-        bg="transparent"
-        alignItems="center"
+        px={3}
       >
-        <Text p={2} fontWeight="bold" fontSize="1.3rem">
-          LiLab APP
-        </Text>
-
-        <Box mx="auto" />
-
-        <Box>
-          <Link variant="nav" to="/login" component={NavLink}>
-            Login
+        <Flex
+          sx={{
+            maxWidth: ["100%", "100%", "920px"],
+          }}
+          flex="1 1 auto"
+          p={2}
+          mx="auto"
+          color="black"
+          bg="transparent"
+          alignItems="center"
+        >
+          <Link
+            variant="nav"
+            fontWeight="bold"
+            fontSize="1.3rem"
+            p={2}
+            to="/"
+            exact
+            component={NavLink}
+          >
+            LiLab APP
           </Link>
-          <Link variant="nav" to="/register" component={NavLink}>
-            Register
-          </Link>
-        </Box>
+          <Box mx="auto" />
+          <Box>
+            <Link variant="nav" to="/login" component={NavLink}>
+              Login
+            </Link>
+            <Link variant="nav" to="/register" component={NavLink}>
+              Register
+            </Link>
+          </Box>
+        </Flex>
       </Flex>
-    </Flex>
+    </Box>
   );
 };
 
 const NavLink = forwardRef(({ children, href, ...rest }, ref) => {
   const { push } = useHistory();
-  let match = useRouteMatch(href);
+  const match = useRouteMatch(href);
 
   const handleClick = (evt) => {
     evt.preventDefault();
@@ -55,10 +70,10 @@ const NavLink = forwardRef(({ children, href, ...rest }, ref) => {
   return (
     <LinkButton
       sx={{
-        cursor: match ? "default" : "pointer",
-        color: match ? "#7f7f7f" : "black",
+        cursor: match && match.isExact ? "default" : "pointer",
+        color: match && match.isExact ? "#7f7f7f" : "black",
         ":hover": {
-          color: match ? "#7f7f7f" : "#205b9d",
+          color: match && match.isExact ? "#7f7f7f" : "#205b9d",
         },
       }}
       ref={ref}
