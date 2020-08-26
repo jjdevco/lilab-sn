@@ -6,7 +6,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { Eclipse, DualRing } from "react-loading-io";
 import { Flex } from "rebass";
 
-import Post from "./Post";
+import PostCard from "./PostCard";
 
 export default ({ match, ...props }) => {
   const {
@@ -85,7 +85,7 @@ export default ({ match, ...props }) => {
           }
         >
           {posts.map((post, index) => (
-            <Post key={post.id} data={post} />
+            <PostCard key={post.id} data={post} height="300px" />
           ))}
         </InfiniteScroll>
       )}
