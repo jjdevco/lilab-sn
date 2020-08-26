@@ -26,7 +26,7 @@ function App() {
           }}
         >
           <Switch>
-            <Route component={Home} path="/" exact />
+            <Route component={Home} path={["/", "/tag/:tag"]} exact />
             <Route component={Login} path="/login" exact />
             <Route component={Register} path="/register" exact />
           </Switch>

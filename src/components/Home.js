@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import { getPosts } from "../api";
+import { getPosts, getPostsByTag } from "../api";
 
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Eclipse, DualRing } from "react-loading-io";
@@ -8,7 +8,11 @@ import { Flex } from "rebass";
 
 import Post from "./Post";
 
-export default (props) => {
+export default ({ match, ...props }) => {
+  const {
+    params: { tag },
+  } = match;
+
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(0);
@@ -22,7 +26,9 @@ export default (props) => {
 
   const fetchMorePosts = async () => {
     try {
-      const { data, page, limit, total } = await getPosts(currentPage + 1);
+      const { data, page, limit, total } = tag
+        ? await getPostsByTag(currentPage + 1, tag)
+        : await getPosts(currentPage + 1);
       setAllData(data, page, limit, total);
     } catch (error) {
       console.error(error);
@@ -31,8 +37,11 @@ export default (props) => {
 
   useEffect(() => {
     const fetcher = async () => {
+      setPosts([]);
       try {
-        const { data, page, limit, total } = await getPosts(0);
+        const { data, page, limit, total } = tag
+          ? await getPostsByTag(0, tag)
+          : await getPosts(0);
         setAllData(data, page, limit, total);
         setLoading(false);
       } catch (error) {
@@ -40,7 +49,7 @@ export default (props) => {
       }
     };
     fetcher();
-  }, []);
+  }, [tag]);
 
   return (
     <Flex

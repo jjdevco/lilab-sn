@@ -24,6 +24,15 @@ export const getPosts = (page) =>
     })
     .then(({ data }) => data);
 
+export const getPostsByTag = (page, tag) =>
+  instanceApi
+    .get(`/tag/${tag}/post`, {
+      params: {
+        page,
+      },
+    })
+    .then(({ data }) => data);
+
 export const getLinkInfo = (url) =>
   instanceScraper.post("", {
     url,
