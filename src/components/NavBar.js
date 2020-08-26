@@ -2,7 +2,7 @@ import React, { forwardRef } from "react";
 
 import { Link, useHistory, useRouteMatch } from "react-router-dom";
 
-import { Box, Flex, Link as LinkButton, Text } from "rebass";
+import { Box, Flex, Link as LinkButton } from "rebass";
 
 export default (props) => {
   return (
@@ -11,13 +11,13 @@ export default (props) => {
         width: "100vw",
         position: "fixed",
         top: 0,
+        zIndex: 2,
       }}
     >
       <Flex
         sx={{
           backgroundColor: "#d8e7e1",
           opacity: 0.95,
-          zIndex: 2,
         }}
         px={3}
       >

@@ -37,7 +37,7 @@ export default ({ data, ...props }) => {
           </Text>
         </Flex>
 
-        <Text mr={2}>{data.text}</Text>
+        <Text mr={2}>{data.message}</Text>
       </Flex>
     </Flex>
   );

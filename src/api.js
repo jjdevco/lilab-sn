@@ -33,6 +33,15 @@ export const getPostsByTag = (page, tag) =>
     })
     .then(({ data }) => data);
 
+export const getPostComments = (page, post) =>
+  instanceApi
+    .get(`/post/${post}/comment/`, {
+      params: {
+        page,
+      },
+    })
+    .then(({ data }) => data);
+
 export const getLinkInfo = (url) =>
   instanceScraper.post("", {
     url,

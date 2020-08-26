@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@bit/react-bootstrap.react-bootstrap.internal.style-links": "^1.0.0",
+    "@bit/react-bootstrap.react-bootstrap.modal": "^1.0.0",
     "@rebass/forms": "^4.0.6",
     "@rebass/preset": "^4.0.5",
     "@testing-library/jest-dom": "^4.2.4",

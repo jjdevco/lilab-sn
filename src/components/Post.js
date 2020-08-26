@@ -1,135 +1,126 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect, useContext } from "react";
 
-import format from "date-fns/format";
+import { getPostComments } from "../api";
 
-import { Flex, Box, Card, Image, Text } from "rebass";
+import { Context } from "../state";
+import { CLOSE_POST_MODAL } from "../state/types";
 
-import PostLink from "./PostLink";
+import PostCard from "./PostCard";
+import Comment from "./Comment";
 
-export default ({ data }) => (
-  <Box mx={10} my={3}>
-    <Card
-      sx={{
-        borderRadius: 10,
-      }}
-      width="100%"
-      maxHeight="100%"
-      px={4}
-      py={3}
-    >
-      <Box>
+import InfiniteScroll from "react-infinite-scroll-component";
+import { Eclipse, DualRing } from "react-loading-io";
+import Modal from "@bit/react-bootstrap.react-bootstrap.modal";
+import ReactBootstrapStyle from "@bit/react-bootstrap.react-bootstrap.internal.style-links";
+import { Flex, Box, Card, Heading } from "rebass";
+
+export default (props) => {
+  const {
+    state: { open, post },
+    dispatch,
+  } = useContext(Context);
+
+  const id = post ? post.id : null;
+
+  const [comments, setComments] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(false);
+
+  const handleClose = () => dispatch({ type: CLOSE_POST_MODAL });
+
+  const setAllData = (data, page, limit, total) => {
+    setComments((posts) => posts.concat(data));
+    setCurrentPage(page);
+    setTotalPages(Math.ceil(total / limit));
+  };
+
+  const fetchMoreComments = async () => {
+    try {
+      const { data, page, limit, total } = await getPostComments(
+        currentPage + 1,
+        id
+      );
+      setAllData(data, page, limit, total);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    const fetcher = async () => {
+      setComments([]);
+      setLoading(true);
+      try {
+        const { data, page, limit, total } = await getPostComments(0, id);
+        setAllData(data, page, limit, total);
+        setLoading(false);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    if (id) fetcher();
+  }, [id]);
+
+  return (
+    <>
+      <ReactBootstrapStyle />
+      <Modal dialogClassName="dialog" show={open} onHide={handleClose}>
         <Flex flexDirection="column">
-          <Flex flexDirection="row">
-            <Image
-              src={data.owner.picture}
-              sx={{
-                height: 48,
-                minWidth: 48,
-                borderRadius: 9999,
-                border: "2px solid darkgray",
-                cursor: "pointer",
-              }}
-              mr={2}
-            />
-            <Flex
-              flexDirection="column"
-              sx={{ height: 48 }}
-              alignItems="start"
-              justifyContent="center"
-            >
-              <Link to={`/user/${data.owner.id}`}>
-                @{data.owner.firstName} {data.owner.lastName}
-              </Link>
-              <Text>
-                {format(new Date(data.publishDate).getTime(), "MMM io, yyyy")}.
-              </Text>
-            </Flex>
-          </Flex>
-
-          <Text mt={3} mb={2} fontSize="1.2rem">
-            {data.text}
-          </Text>
-
-          <Box
+          {open && <PostCard data={post} height="200px" comments={false} />}
+          <Card
             sx={{
-              borderRadius: "5px",
+              borderRadius: 10,
             }}
+            p={3}
+            mx={10}
           >
-            <Image
-              sx={{
-                borderRadius: "4px",
-              }}
-              height="auto"
-              src={data.image}
-            />
+            {loading && (
+              <Flex flex="1 1 auto" justifyContent="center" alignItems="center">
+                <Eclipse color="#acb8b4" size={100} width={2} />
+              </Flex>
+            )}
 
-            {data.link && <PostLink link={data.link} image={data.image} />}
-          </Box>
-
-          <Box py={2}>
-            {data.tags.map((tag, index) => (
-              <Box m={1} key={`${index}-${tag}`} display="inline-block">
-                <Link to={`/tag/${tag}`}>#{tag}</Link>
-              </Box>
-            ))}
-          </Box>
-
-          <Flex
-            flexDirection="row"
-            justifyContent="space-evenly"
-            alignItems="center"
-          >
-            <IconButton onClick={() => console.log("clikc")} />
-
-            <Flex
-              sx={{
-                cursor: "default",
-              }}
-              alignItems="center"
-            >
-              <i
-                className="material-icons"
-                style={{
-                  color: data.likes > 0 ? "#389681" : "gray",
-                }}
+            {open && !loading && comments.length > 0 && (
+              <InfiniteScroll
+                style={{ overflow: "hidden" }}
+                dataLength={comments.length}
+                next={fetchMoreComments}
+                hasMore={currentPage < totalPages}
+                loader={
+                  <Flex justifyContent="center" alignItems="center">
+                    <DualRing color="#acb8b4" size={64} width={2} />
+                  </Flex>
+                }
               >
-                {data.likes > 0 ? "favorite" : "favorite_border"}
-              </i>
-              <Text fontSize={12} ml={1}>
-                {data.likes}
-              </Text>
-            </Flex>
-          </Flex>
-        </Flex>
-      </Box>
-    </Card>
-  </Box>
-);
+                {comments.map((comment, index) => (
+                  <>
+                    <Comment key={comment.id} data={comment} />
 
-const IconButton = ({ onClick }) => (
-  <Flex
+                    {index + 1 < comments.length && <Divider />}
+                  </>
+                ))}
+              </InfiniteScroll>
+            )}
+
+            {open && !loading && comments.length === 0 && (
+              <Heading color="darkgray" textAlign="center">
+                No Comments
+              </Heading>
+            )}
+          </Card>
+        </Flex>
+      </Modal>
+    </>
+  );
+};
+
+const Divider = () => (
+  <Box
     sx={{
-      height: 36,
-      minWidth: 36,
-      borderRadius: 9999,
-      color: "black",
-      cursor: "pointer",
-      transition: "all 100ms ease-out",
-      border: "1px solid transparent",
-      ":hover": {
-        backgroundColor: "rgba(12, 12, 12, 0.15)",
-      },
-      ":active": {
-        backgroundColor: "rgba(12, 12, 12, 0.25)",
-        borderColor: "darkgray",
-      },
+      borderBottom: "1px solid lightgray",
     }}
-    justifyContent="center"
-    alignItems="center"
-    className="material-icons-outlined"
-    onClick={onClick}
-  >
-    comment
-  </Flex>
+    mx={2}
+    my={3}
+  ></Box>
 );
