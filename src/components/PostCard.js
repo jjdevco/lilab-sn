@@ -8,6 +8,7 @@ import { SHOW_POST_MODAL } from "../state/types";
 
 import { Flex, Box, Card, Image, Text } from "rebass";
 
+import ProfileButton from "./ProfileButton";
 import PostLink from "./PostLink";
 
 export default ({ data, height, comments }) => {
@@ -36,15 +37,18 @@ export default ({ data, height, comments }) => {
           }}
           mr={2}
         />
+
         <Flex
           flexDirection="column"
           sx={{ height: 48 }}
           alignItems="start"
           justifyContent="center"
         >
-          <Link to={`/user/${data.owner.id}`}>
-            @{data.owner.firstName} {data.owner.lastName}
-          </Link>
+          <ProfileButton
+            id={data.owner.id}
+            username={`${data.owner.firstName}_${data.owner.lastName}`}
+          />
+
           <Text>
             {format(new Date(data.publishDate).getTime(), "MMM io, yyyy")}.
           </Text>

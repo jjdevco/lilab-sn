@@ -42,6 +42,9 @@ export const getPostComments = (page, post) =>
     })
     .then(({ data }) => data);
 
+export const getUserInfo = (user) =>
+  instanceApi.get(`/user/${user}`).then(({ data }) => data);
+
 export const getLinkInfo = (url) =>
   instanceScraper.post("", {
     url,

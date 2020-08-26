@@ -1,7 +1,8 @@
 import React from "react";
-import { Link } from "react-router-dom";
 
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
+
+import ProfileButton from "./ProfileButton";
 
 import { Flex, Image, Text } from "rebass";
 
@@ -26,9 +27,10 @@ export default ({ data, ...props }) => {
           justifyContent="start"
           alignItems="first baseline"
         >
-          <Link to={`/user/${data.owner.id}`}>
-            @{data.owner.firstName} {data.owner.lastName}
-          </Link>
+          <ProfileButton
+            id={data.owner.id}
+            username={`${data.owner.firstName}_${data.owner.lastName}`}
+          />
 
           <span>&nbsp;&#183;&nbsp;</span>
 

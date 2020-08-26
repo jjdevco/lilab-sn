@@ -1,2 +1,6 @@
 export const SHOW_POST_MODAL = "SHOW_POST_MODAL";
 export const CLOSE_POST_MODAL = "CLOSE_POST_MODAL";
+
+export const SHOW_PROFILE = "SHOW_PROFILE";
+export const SET_PROFILE = "SET_PROFILE";
+export const CLOSE_PROFILE = "CLOSE_PROFILE";

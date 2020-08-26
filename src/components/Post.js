@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, Fragment } from "react";
 
 import { getPostComments } from "../api";
 
@@ -94,11 +94,13 @@ export default (props) => {
                 }
               >
                 {comments.map((comment, index) => (
-                  <>
-                    <Comment key={comment.id} data={comment} />
+                  <Fragment key={`fragment-${comment.id}`}>
+                    <Comment key={`comment-${comment.id}`} data={comment} />
 
-                    {index + 1 < comments.length && <Divider />}
-                  </>
+                    {index + 1 < comments.length && (
+                      <Divider key={`divider-${comment.id}`} />
+                    )}
+                  </Fragment>
                 ))}
               </InfiniteScroll>
             )}

@@ -6,6 +6,8 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { Eclipse, DualRing } from "react-loading-io";
 import { Flex } from "rebass";
 
+import Profile from "./Profile";
+import Post from "./Post";
 import PostCard from "./PostCard";
 
 export default ({ match, ...props }) => {
@@ -63,11 +65,13 @@ export default ({ match, ...props }) => {
       mx="auto"
       bg="transparent"
     >
-      {loading ? (
+      {loading && (
         <Flex flex="1 1 auto" justifyContent="center" alignItems="center">
           <Eclipse color="#acb8b4" size={120} width={4} />
         </Flex>
-      ) : (
+      )}
+
+      {!loading && (
         <InfiniteScroll
           style={{ overflow: "hidden" }}
           dataLength={posts.length}
@@ -85,10 +89,14 @@ export default ({ match, ...props }) => {
           }
         >
           {posts.map((post, index) => (
-            <PostCard key={post.id} data={post} height="300px" />
+            <PostCard key={post.id} data={post} height="100%" comments={true} />
           ))}
         </InfiniteScroll>
       )}
+
+      <Post />
+
+      <Profile />
     </Flex>
   );
 };

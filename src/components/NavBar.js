@@ -11,7 +11,7 @@ export default (props) => {
         width: "100vw",
         position: "fixed",
         top: 0,
-        zIndex: 2,
+        zIndex: 2000,
       }}
     >
       <Flex
