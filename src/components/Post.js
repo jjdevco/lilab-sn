@@ -16,7 +16,7 @@ import { Flex, Box, Card, Heading } from "rebass";
 
 export default (props) => {
   const {
-    state: { open, post },
+    state: { openPost, post },
     dispatch,
   } = useContext(Context);
 
@@ -65,9 +65,9 @@ export default (props) => {
   return (
     <>
       <ReactBootstrapStyle />
-      <Modal dialogClassName="dialog" show={open} onHide={handleClose}>
+      <Modal dialogClassName="dialog" show={openPost} onHide={handleClose}>
         <Flex flexDirection="column">
-          {open && <PostCard data={post} height="200px" comments={false} />}
+          {openPost && <PostCard data={post} height="200px" comments={false} />}
           <Card
             sx={{
               borderRadius: 10,
@@ -81,7 +81,7 @@ export default (props) => {
               </Flex>
             )}
 
-            {open && !loading && comments.length > 0 && (
+            {openPost && !loading && comments.length > 0 && (
               <InfiniteScroll
                 style={{ overflow: "hidden" }}
                 dataLength={comments.length}
@@ -103,7 +103,7 @@ export default (props) => {
               </InfiniteScroll>
             )}
 
-            {open && !loading && comments.length === 0 && (
+            {openPost && !loading && comments.length === 0 && (
               <Heading color="darkgray" textAlign="center">
                 No Comments
               </Heading>
