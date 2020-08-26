@@ -1,0 +1,2 @@
+export const SHOW_POST_MODAL = "SHOW_POST_MODAL";
+export const CLOSE_POST_MODAL = "CLOSE_POST_MODAL";
