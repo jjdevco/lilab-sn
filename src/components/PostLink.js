@@ -4,7 +4,7 @@ import { getLinkInfo } from "../api";
 
 import { Flex, Box, Text, Image } from "rebass";
 
-export default ({ link }) => {
+export default ({ link, ...props }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState("");
@@ -47,6 +47,7 @@ export default ({ link }) => {
           borderColor: "black",
         },
       }}
+      {...props}
       bg="gray"
       onClick={() => window.open(link, "_blank")}
     >
